@@ -13,13 +13,13 @@ public class LogInterceptor {
 		String methodName = ctx.getMethod().getName();
 		String className = ctx.getMethod().getDeclaringClass().getName();
 		
-		System.out.println("["+new Date()+"] [entrada] " + className + "." + methodName);
+		System.out.println(String.format("[%s][entrada] %s.%s", new Date(), className, methodName));
 		Long initialTime = System.currentTimeMillis();
 		
 		Object result = ctx.proceed();
 		
 		Long finalTime = System.currentTimeMillis();
-		System.out.println("["+new Date()+"] [saída] " + className + "." + methodName + " [tempo: "+(finalTime-initialTime)+" ms]");
+		System.out.println(String.format("[%s][saída] %s.%s [tempo: %d ms]", new Date(), className,methodName,finalTime-initialTime));
 		
 		return result;
 	}

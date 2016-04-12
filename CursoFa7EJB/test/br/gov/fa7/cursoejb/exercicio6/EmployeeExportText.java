@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.naming.NamingException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.thoughtworks.xstream.XStream;
@@ -17,6 +18,7 @@ import com.thoughtworks.xstream.XStream;
 public class EmployeeExportText {
 
 	@Test
+	@Ignore
 	public void testGenerateXML() throws NamingException, FileNotFoundException {
 		int total = 10000;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
