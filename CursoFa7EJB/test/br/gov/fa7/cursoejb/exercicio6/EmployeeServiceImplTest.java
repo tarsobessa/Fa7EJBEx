@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import org.junit.Test;
@@ -19,5 +20,12 @@ public class EmployeeServiceImplTest {
 	public void testImportItems() throws NamingException {
 		EmployeeService employeeService = JNDIUtils.lookup("ejb:CursoFa7/CursoFa7EJB/EmployeeService!br.gov.fa7.cursoejb.exercicio6.EmployeeService");
 		employeeService.importItems((List<Map<String, Object>>) new XStream().fromXML(new File("employees.xml")));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testQueueImportItems() throws NamingException, JMSException {
+		EmployeeService employeeService = JNDIUtils.lookup("ejb:CursoFa7/CursoFa7EJB/EmployeeService!br.gov.fa7.cursoejb.exercicio6.EmployeeService");
+		employeeService.queueImportItems((List<Map<String, Object>>) new XStream().fromXML(new File("employee.xml")));
 	}
 }
