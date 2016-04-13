@@ -26,6 +26,6 @@ public class EmployeeServiceImplTest {
 	@Test
 	public void testQueueImportItems() throws NamingException, JMSException {
 		EmployeeService employeeService = JNDIUtils.lookup("ejb:CursoFa7/CursoFa7EJB/EmployeeService!br.gov.fa7.cursoejb.exercicio6.EmployeeService");
-		employeeService.queueImportItems((List<Map<String, Object>>) new XStream().fromXML(new File("employee.xml")));
+		employeeService.queueImportItems((List<Map<String, Object>>) new XStream().fromXML(new File("employees.xml")));
 	}
 }

@@ -12,9 +12,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-//@MessageDriven(activationConfig = {
-//		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/EmployeeImportQueue"),
-	//	@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue") })
+@MessageDriven(activationConfig = {
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/EmployeeImportQueue"),
+		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue") })
 public class EmployeeImporterMDB implements MessageListener {
 	
 	@EJB
