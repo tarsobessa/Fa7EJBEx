@@ -27,9 +27,7 @@ public class JMSUtils {
 			throws JMSException {
 		Connection conn = connFactory.createConnection();
 		try {
-			Session session = conn.createSession(true, Session.AUTO_ACKNOWLEDGE); // Java
-																					// EE
-																					// 6
+			Session session = conn.createSession(true, Session.AUTO_ACKNOWLEDGE); // Java EE 6
 			MessageProducer producer = session.createProducer(queue);
 			ObjectMessage objMessage = session.createObjectMessage();
 			objMessage.setObject(obj);

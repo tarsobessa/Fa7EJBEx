@@ -1,5 +1,7 @@
 # Aplicação EJB de Exemplo
 
+Aplicação de exemplo mostrando os vários tipos de EJBs, injeção de dependência, interceptadores, exceções de aplicação, métodos assíncronos e timers.
+
 ## Configurações iniciais
 
 ### Ambiente
@@ -11,6 +13,8 @@
 * Usar standalone-full.xml
 
 	Aba Server > Duplo clique no servidor > Runtime Environment > Configuration File
+	
+#### DataSource
 	
 * Adicionar o conteúdo abaixo no arquivo standalone-full.xml, na seção subsytem > datasources, entre as tags **datasource** e **drivers**.
 
@@ -47,6 +51,17 @@
 	    <share-prepared-statements>false</share-prepared-statements>
 	  </statement>
 </xa-datasource>
+```
+
+#### Fila JMS
+
+* Ainda em standalone-full.xml, adicionar o conteúdo abaixo na seção **jms-destinations**:
+
+```
+<jms-queue name="EmployeeQueue">
+	<entry name="java:/jms/EmployeeQueue"/>
+	<durable>true</durable>
+</jms-queue>
 ```
 
 	
