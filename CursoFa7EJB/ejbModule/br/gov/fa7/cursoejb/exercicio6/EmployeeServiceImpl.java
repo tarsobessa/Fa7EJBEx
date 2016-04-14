@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -35,10 +34,51 @@ public class EmployeeServiceImpl implements EmployeeService, EmployeeServiceLoca
 	public void init() {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
-
+	/**
+	 * Realiza a importação de forma assíncrona.
+	 */
 	@Override
 	@Asynchronous
 	public void importItems(List<Map<String, Object>> items) {
+		importEmployees(items);
+	}
+	
+    private static final int MSG_SIZE = 1000; 
+	/**
+	 * Fila declarada em standalone-full.xml
+	 */
+	@Resource(name="java:/jms/EmployeeQueue")
+	private Queue employeeQueue;
+	
+	/**
+	 * Connection Factory XA.
+	 */
+	@Resource (name="java:/JmsXA")
+	private ConnectionFactory connFactory;
+	
+	/**
+	 * Divide a lista de items em listas menores de tamanho 1000 e publica uma mensagem JMS
+	 * para cada uma das listas.
+	 * 
+	 */
+	@Override
+	public void queueImportItems(List<Map<String, Object>> items) throws JMSException {
+		if(items!=null){
+			do {
+				
+				List<Map<String, Object>> subList = new ArrayList<Map<String,Object>>();
+				subList.addAll(items.subList(0, Math.min(MSG_SIZE, items.size())));
+				
+				items.removeAll(subList);
+				JMSUtils.publishMessage(employeeQueue, connFactory, (Serializable) subList);
+			} while (!items.isEmpty());
+		}
+	}
+	/**
+	 * Converte cada item da lista em Employee e persiste usando o EntityManager
+	 */
+	@Override
+	public void importEmployees(List<Map<String, Object>> items) {
 		if (items != null) {
 			for (Map<String, Object> item : items) {
 				Employee emp = new Employee();
@@ -52,29 +92,5 @@ public class EmployeeServiceImpl implements EmployeeService, EmployeeServiceLoca
 				manager.persist(emp);
 			}
 		}
-	}
-	
-    private static final int MSG_SIZE = 1000; 
-	
-	@Resource(name="java:/jms/EmployeeImportQueue")
-	private Queue employeeQueue;
-	
-	@Resource (name="java:/JmsXA")
-	private ConnectionFactory connFactory;
-
-	@Override
-	public void queueImportItems(List<Map<String, Object>> items) throws JMSException {
-		if(items!=null){
-			do {
-				List<Map<String, Object>> subList = new ArrayList<Map<String,Object>>(items.subList(0, Math.min(MSG_SIZE, items.size())));
-				items.removeAll(subList);
-				JMSUtils.publishMessage(employeeQueue, connFactory, (Serializable) subList);
-			} while (!items.isEmpty());
-		}
-	}
-
-	@Override
-	public void importEmployees(List<Map<String, Object>> items) {
-		this.importItems(items);
 	}
 }

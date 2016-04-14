@@ -2,16 +2,22 @@ package br.gov.fa7.cursoejb.exercicio8;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
-@Stateless
+/**
+ * Imprime no console dados de uso da memória da JVM.
+ *
+ */
+@Singleton
 @LocalBean
 public class HeapMonitor {
 
 	public static final int MB = 1024 * 1024;
-
-	@Schedule(minute = "*/1", hour = "*", persistent = false)
-	public void buildStats() {
+	/**
+	 * A cada minuto, imprime dados de uso memória da JVM.
+	 */
+	@Schedule(minute = "*", hour = "*", persistent = false)
+	public void printStats() {
 
 		Runtime runtime = Runtime.getRuntime();
 		System.out.println("\n[Estatísticas de Memória]");
